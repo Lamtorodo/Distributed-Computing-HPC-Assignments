@@ -8,7 +8,7 @@ RANK = COMM.Get_rank()
 SIZE = COMM.Get_size()
 
 def f(x):
-    return np.sin(x)
+    return np.cos(x)
     
 a=0
 b=np.pi # b>a
@@ -39,5 +39,5 @@ end = timeit.default_timer()
 
 if RANK==0:
 	integral=(sum_M/N)*Area_rectangle
-	print("Integral of sin(x) between {a} and {b} = {L}".format(a=a,b=b,L=integral))
+	print("Integral of cos(x) between {a} and {b} = {L}".format(a=a,b=b,L=integral))
 	print("Run time:",end-start) 

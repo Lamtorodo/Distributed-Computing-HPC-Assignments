@@ -6,10 +6,8 @@ COMM = MPI.COMM_WORLD
 RANK = COMM.Get_rank()
 SIZE = COMM.Get_size()
 
-INTERVAL= 1000
-nbi=int(INTERVAL/SIZE)+(SIZE==(RANK+1))*(INTERVAL%SIZE)
-
-random.seed(42)  
+interval= 500
+nbi=int(interval/SIZE)+(SIZE==(RANK+1))*(interval%SIZE)
 
 def compute_points():
     
@@ -49,7 +47,8 @@ circle_points = compute_points()
 total_circle_points=COMM.reduce(circle_points,op=MPI.SUM, root=0)
 end = timeit.default_timer()
 
-#print("Circle points number :",circle_points)
+
 if RANK==0:
-	pi = 4* total_circle_points/ INTERVAL
-	print("Final Estimation of Pi=", pi, "cpu time :",end-start) 
+	print("Circle points number :",circle_points)
+	pi = 4* total_circle_points/ interval
+	print("Pi value=", pi, "obtained in :",end-start, "seconds") 

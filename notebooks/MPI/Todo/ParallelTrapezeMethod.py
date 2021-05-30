@@ -27,39 +27,44 @@ def plot_integrale(x, y, nbi):
     
     return 0
 
-t0 = time.process_time()
+t0 = time.process_time() ##on lance notre chronomètre
 Xmin = 0
 Xmax = 3*np.pi/2
-nbx = 20  # max nbr of iterations
+nbx = 15  # nombre d'itérations maximum
 dx = (Xmax-Xmin)/(nbx-1) # space step
 
-## distributing automatically the interval [xmin; xmax] between processors
+## On distribue l'intervalle dans chaque processeur
 nbi = int((nbx-1)/SIZE) 
 
 if SIZE == RANK+1:
 	nbi += (nbx-1)%SIZE
 
-## [xmin; xmax] in each processor
+## on calcule l'intervalle concernant chaque processeur
 if RANK == (SIZE-1):
-   xmax = 3*np.pi/2
-   xmin = Xmax-nbi*dx
+       xmax = 3*np.pi/2
+       xmin = Xmax-nbi*dx
 else:
-   xmin =Xmin+RANK*nbi*dx
-   xmax =Xmin+(RANK+1)*nbi*dx 
+       xmin =Xmin+RANK*nbi*dx
+       xmax =Xmin+(RANK+1)*nbi*dx 
 
 nbxloc = nbi+1
 x = np.linspace(xmin, xmax, nbxloc)
-y = np.cos(x)
+y = np.sin(x)
 
 integrale = compute_integrale_trapeze(x, y, nbi)
+#faire la somme des calculs des intégrales venant de chaque processeur dans le processeur 1
 integrale_sum=COMM.reduce(integrale,op=MPI.SUM, root=0)
-t1 = time.process_time()
-
-#print("integrale in {rank} is {integ} :".format(rank=RANK,integ=integrale))
+t1 = time.process_time() ## on finit de calculer le temps
 
 if RANK==0:
 	print('\n')
 	print("Integrale =", integrale_sum)
-	print("Time spent is",t1 - t0)
+	print("Temps",t1 - t0 , "secondes")
 	
 
+#On affiche nos plots
+plot_integrale(x, y, nbi)   
+    
+print("integrale =", integrale)
+
+plt.show()

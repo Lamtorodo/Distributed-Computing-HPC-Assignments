@@ -38,6 +38,8 @@ plt.plot(x,y,"bo-")
 
 
 integrale = compute_integrale_trapeze(x, y, nbi)
+
+#On affiche nos plots
 plot_integrale(x, y, nbi)   
     
 print("integrale =", integrale)
