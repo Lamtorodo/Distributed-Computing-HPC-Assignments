@@ -1,0 +1,2 @@
+mpirun --use-hwthread-cpus -n 4 python cart2d.py
+
